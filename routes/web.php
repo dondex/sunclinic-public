@@ -2,16 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 
-
 Route::get('/', function () {
     return view('welcome');
 });
 
-
-
 Auth::routes();
 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/', [App\Http\Controllers\Frontend\FrontendController::class, 'index']);
 
@@ -26,16 +23,20 @@ Route::middleware('auth')->group(function () {
     Route::get('lab-result/{user_id}', [App\Http\Controllers\Frontend\LabResultController::class, 'index']);
 
     Route::get('department/{department_id}', [App\Http\Controllers\Frontend\SingleDeptController::class, 'index']);
-   
+
     Route::get('my-appointment/{user_id}', [App\Http\Controllers\Frontend\MyAppointmentController::class, 'index']);
 
     Route::get('set-appointment/{user_id}', [App\Http\Controllers\Frontend\SetAppointmentController::class, 'create']);
     Route::get('/doc-by-dept', [App\Http\Controllers\Frontend\SetAppointmentController::class, 'doctorsByDepartment']);
     Route::post('set-appointment/{user_id}', [App\Http\Controllers\Frontend\SetAppointmentController::class, 'store']);
 
-    
+    // New Ticket Routes for Frontend
+    Route::get('ticket/{id}', [App\Http\Controllers\Frontend\TicketQueueController::class, 'show'])->name('ticket.show');
+    Route::get('my-tickets/{user_id}', [App\Http\Controllers\Frontend\TicketQueueController::class, 'currentUser'])->name('ticket.user');
 });
 
+// Public Queue Display - accessible without authentication
+Route::get('queue-display', [App\Http\Controllers\Frontend\TicketQueueController::class, 'displayQueue'])->name('queue.display');
 
 Route::prefix('admin')->middleware('is_admin')->group(function () {
 
@@ -77,7 +78,5 @@ Route::prefix('admin')->middleware('is_admin')->group(function () {
     Route::get('records/{record_id}/edit', [App\Http\Controllers\Admin\RecordController::class, 'edit']);
     Route::put('records/{record_id}', [App\Http\Controllers\Admin\RecordController::class, 'update']);
     Route::get('delete-record/{record_id}',[App\Http\Controllers\Admin\RecordController::class, 'destroy']);
-    
-    
 
 });
