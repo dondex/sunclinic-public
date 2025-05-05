@@ -32,6 +32,9 @@ Route::middleware('auth')->group(function () {
     Route::get('ticket/{id}', [App\Http\Controllers\Frontend\TicketQueueController::class, 'show'])->name('ticket.show');
     Route::get('my-tickets/{user_id}', [App\Http\Controllers\Frontend\TicketQueueController::class, 'currentUser'])->name('ticket.user');
     
+    // New ticket status check route
+    Route::get('check-ticket-status/{id}', [App\Http\Controllers\Frontend\TicketQueueController::class, 'checkStatus'])->name('ticket.check-status');
+    
     // New ticket routes
     Route::get('tickets/restart', [App\Http\Controllers\Frontend\TicketQueueController::class, 'restart'])->name('tickets.restart'); 
     Route::get('tickets/show/{id}', [App\Http\Controllers\Frontend\TicketQueueController::class, 'showSpecific'])->name('tickets.show-specific');

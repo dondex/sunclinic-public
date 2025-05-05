@@ -4,59 +4,47 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            @if(session('message'))
-                <div class="alert alert-success">
-                    {{ session('message') }}
-                </div>
-            @endif
+            <!-- Alert container for notifications -->
+            <div class="alert-container">
+                @if(session('message'))
+                    <div class="alert alert-success">
+                        {{ session('message') }}
+                    </div>
+                @endif
+            </div>
             
-            <div class="card">
+            <div class="card" id="ticket-container" data-ticket-id="{{ $ticket->id }}">
                 <div class="card-header text-center">
                     <img src="{{ asset('assets/images/logo.png') }}" alt="Sun City's" class="img-fluid" style="max-height: 80px;">
                     <h3 class="mt-2">Sun City's Polyclinic & Family Clinic</h3>
                 </div>
                 
-                <div class="card-body">
-                    <div class="row">
-                        <!-- Left column: Current Queue -->
-                        <div class="col-md-4 border-right">
-                            <div class="queue-list">
-                                <h5 class="mb-3">Current Queue</h5>
-                                
-                                @forelse($recentRegularTickets as $queueTicket)
-                                <div class="ticket-item">
-                                    <div class="d-flex justify-content-between">
-                                        <span class="font-weight-bold">{{ $queueTicket->ticket_number }}</span>
-                                        <span>{{ $queueTicket->department->name }}</span>
-                                    </div>
-                                    <small>Dr. {{ $queueTicket->doctor->name }}</small>
+                <div class="card-body d-flex justify-content-center align-items-center">
+                    <div class="row w-100">
+                        <div class="col-12 text-center">
+                            <div class="ticket-container">
+                                <h4 class="mb-4">Token Number</h4>
+                                <div class="ticket-number">
+                                    <h1 class="text-danger font-weight-bold">{{ $ticket->ticket_number }}</h1>
                                 </div>
-                                @empty
-                                <div class="ticket-item">
-                                    <p>No tickets in queue</p>
+                                <div class="ticket-details">
+                                    <h5 class="text-danger">Department {{ $ticket->department->name }}</h5>
+                                    <h5 class="text-danger">Dr. {{ $ticket->doctor->name }}</h5>
                                 </div>
-                                @endforelse
+                                <div class="ticket-status mt-3">
+                                    @if($ticket->status === 'processing')
+                                        <span class="badge bg-success">Now Processing</span>
+                                    @elseif($ticket->status === 'completed')
+                                        <span class="badge bg-secondary">Completed</span>
+                                    @else
+                                        <span class="badge bg-warning text-dark">Waiting</span>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                         
-                        <!-- Middle column: Your Ticket -->
-                        <div class="col-md-4 text-center">
-                            <h4 class="mb-4">Token Number</h4>
-                            <div class="ticket-number">
-                                <h1 class="text-danger font-weight-bold" style="font-size: 3.5rem;">{{ $ticket->ticket_number }}</h1>
-                            </div>
-                            <div class="ticket-details mt-4 text-danger">
-                                <h5>Department {{ $ticket->department->name }}</h5>
-                                <h5>Dr. {{ $ticket->doctor->name }}</h5>
-                            </div>
-                            <div class="queue-info mt-4">
-                                <p>People ahead of you: {{ $waitingTickets }}</p>
-                                <p>Estimated waiting time: {{ $waitingTickets * 15 }} minutes</p>
-                            </div>
-                        </div>
-                        
-                        <!-- Right column: Priority Lane -->
-                        <div class="col-md-4 text-center {{ $ticket->priority == 'priority' ? 'bg-warning-subtle' : '' }}">
+                        <!-- Priority Lane (if applicable) - Hidden by default unless needed -->
+                        <div class="col-md-12 text-center mt-3 {{ $ticket->priority == 'priority' || $priorityTicket ? 'bg-warning-subtle' : 'd-none' }}">
                             @if($priorityTicket)
                             <div class="priority-section">
                                 <h4 class="text-warning mt-3">Priority Lane</h4>
@@ -80,25 +68,27 @@
                     <h5 class="mb-0">Welcome to Sun City Hospital</h5>
                 </div>
             </div>
-            
-            <div class="text-center mt-4">
-                <a href="#" class="btn btn-primary" onclick="window.print()">Print Ticket</a>
-                <a href="{{ route('home') }}" class="btn btn-secondary">Back to Home</a>
-            </div>
         </div>
     </div>
 </div>
 
+<!-- Add notification sound -->
+<audio id="notification-sound" src="{{ asset('assets/sounds/notification.mp3') }}" preload="auto"></audio>
+
 <style>
-    .border-right {
-        border-right: 1px solid #dee2e6;
+    .card-body {
+        min-height: 400px;
+        padding: 0;
     }
-    .ticket-item {
-        padding: 10px 0;
-        border-bottom: 1px solid #eee;
+    .ticket-container {
+        padding: 40px 20px;
     }
-    .ticket-number {
-        padding: 20px 0;
+    .ticket-number h1 {
+        font-size: 6rem;
+        margin: 30px 0;
+    }
+    .ticket-details {
+        margin-top: 30px;
     }
     .bg-warning-subtle {
         background-color: #fff8e1;
@@ -115,4 +105,8 @@
         }
     }
 </style>
+@endsection
+
+@section('scripts')
+<script src="{{ asset('js/ticket-status.js') }}"></script>
 @endsection
