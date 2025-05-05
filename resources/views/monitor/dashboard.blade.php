@@ -28,17 +28,25 @@
             font-size: 1.25rem;
         }
         .logo {
-            height: 100px;
-            margin-bottom: 20px;
-        }
+    height: 100px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    max-width: 100%;
+    max-height: 100px;
+}
+
     </style>
 </head>
 <body>
     <div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
         <div class="text-center">
             <div class="clinic-info mb-4">
-                <img src="{{ asset('images/logo.png') }}" alt="Clinic Logo" class="logo">
-                <h1 class="mt-3">Sun City's Polyclinic & Family Clinic</h1>
+                <img src="{{ asset('https://www.suncitypolyclinicsa.com/public/media/uploads/logo-favicon/173183818125.png') }}" alt="Clinic Logo" class="logo">
+                <h2 class="mt-3">Sun City's Polyclinic & Family Clinic</h2>
             </div>
 
             <div class="card p-5 mb-4">

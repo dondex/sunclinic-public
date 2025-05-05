@@ -13,9 +13,15 @@
         }
         
         body {
-            background-color: #007a3d;
-            color: white;
-        }
+    background: linear-gradient(135deg, #007a3d 0%, #009f4d 100%);
+    color: white;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+}
+
         
         .header {
             display: flex;
@@ -100,11 +106,22 @@
         }
         
         .services-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            padding: 0 20px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        padding: 0 20px;
         }
+
+        @media (max-width: 768px) {
+        .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+        }
+        }
+
+        .department-section {
+        margin-top: 20px;
+        }
+
         
         .service-item {
             background-color: #f4f7f6;
@@ -120,6 +137,9 @@
             height: 50px;
             margin-bottom: 10px;
             color: #007a3d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .service-name {
@@ -277,7 +297,7 @@
     </div>
 
 
-<div class="services-grid">
+<div class="services-grid department-section">
     @foreach($department as $dept)
         <div class="service-item">
             <a href="{{ url('department/' . $dept->id) }}" style="text-decoration: none; color: inherit;">
@@ -289,6 +309,7 @@
         </div>
     @endforeach
 </div>
+
 
 
 
