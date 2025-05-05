@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -77,10 +76,10 @@ class LoginController extends Controller
     {
         if ($user->role_as == '1') {
             return redirect('/admin/dashboard')->with('status', 'Welcome to Admin Dashboard');
-        } elseif ($user->role_as == '0') {
-            return redirect('/')->with('status', 'Logged In Successfully');
+        } elseif ($user->role_as == '2') {
+            return redirect()->route('monitor.dashboard')->with('status', 'Welcome to Monitor Dashboard');
         } else {
-            return redirect('/')->with('status', 'Welcome!');
+            return redirect('/')->with('status', 'Logged In Successfully');
         }
     }
 }

@@ -99,18 +99,18 @@
                 </div>
             </li>
 
-            <!-- Nav Item - Charts -->
+           
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePatients"
-                    aria-expanded="true" aria-controls="collapsePatients">
-                    <i class="fas fa-user-injured"></i>
-                    <span>Patients</span>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTickets"
+                    aria-expanded="true" aria-controls="collapseTickets">
+                    <i class="fas fa-ticket-alt"></i>
+                    <span>Ticket Management</span>
                 </a>
-                <div id="collapsePatients" class="collapse" aria-labelledby="headingUtilities"
+                <div id="collapseTickets" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Patient Components:</h6>
-                        <a class="collapse-item" href="{{ url('admin/patients') }}">View Patient</a>
+                        <h6 class="collapse-header">Ticket Components:</h6>
+                        <a class="collapse-item" href="{{ url('admin/tickets') }}">Manage Queue</a>
                     </div>
                 </div>
             </li>

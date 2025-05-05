@@ -13,11 +13,21 @@ class Ticket extends Model
         'ticket_number',
         'department_id',
         'doctor_id',
-        'patient_id', 
+        'patient_id',
         'priority',
         'status',
+        'position'
     ];
 
+    protected static function booted()
+    {
+        static::creating(function ($ticket) {
+            // Auto-assign position when creating new ticket
+            $ticket->position = Ticket::max('position') + 1;
+        });
+    }
+
+    // Relationships
     public function department()
     {
         return $this->belongsTo(Department::class);
