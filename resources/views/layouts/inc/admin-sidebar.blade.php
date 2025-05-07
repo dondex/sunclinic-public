@@ -77,6 +77,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Appointment Components:</h6>
                         <a class="collapse-item" href="{{ url('admin/add-appointment') }}">Add Appointment</a>
+                        <a class="collapse-item" href="{{ url('admin/add-walkin') }}">Add Walk-in</a>
                         <a class="collapse-item" href="{{ url('admin/appointments') }}">View Appointments</a>
                     </div>
                 </div>

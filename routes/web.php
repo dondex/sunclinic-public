@@ -86,6 +86,12 @@ Route::prefix('admin')->middleware(['web', 'is_admin'])->group(function () {
     Route::get('appointment/{appointment_id}', [App\Http\Controllers\Admin\AppointmentController::class, 'edit']);
     Route::put('update-appointment/{appointment_id}', [App\Http\Controllers\Admin\AppointmentController::class, 'update']);
     Route::get('/doctors-by-department', [App\Http\Controllers\Admin\AppointmentController::class, 'getDoctorsByDepartment']);
+    
+    // Walk-in Routes - FIXED: Removed leading slashes
+    Route::get('add-walkin', [App\Http\Controllers\Admin\WalkInController::class, 'create'])->name('admin.walkin.create');
+    Route::post('add-walkin', [App\Http\Controllers\Admin\WalkInController::class, 'store'])->name('admin.walkin.store');
+    Route::get('walkin/doctors', [App\Http\Controllers\Admin\WalkInController::class, 'doctorsByDepartment'])->name('admin.walkin.doctors');
+    Route::get('walkin/ticket/{id}', [App\Http\Controllers\Admin\WalkInController::class, 'showTicket'])->name('admin.walkin.ticket');
 
     // Medical Records
     Route::get('records', [App\Http\Controllers\Admin\RecordController::class, 'index']);

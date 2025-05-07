@@ -85,6 +85,7 @@ class SetAppointmentController extends Controller
         $ticket->department_id = $appointment->department_id;
         $ticket->doctor_id = $appointment->doctor_id;
         $ticket->status = 'waiting';
+        $ticket->source = 'appointment';
         
         // Set priority and generate ticket number
         if ($isPriority) {
