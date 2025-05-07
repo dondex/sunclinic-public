@@ -64,10 +64,14 @@ class WalkInController extends Controller
         if (!$user) {
             $user = new User();
             $user->name = $request->input('name');
-            $user->email = $request->filled('email') ? $request->input('email') : null;
+            // Generate a placeholder email if none provided
+            $user->email = $request->filled('email') 
+                ? $request->input('email') 
+                : 'walkin_' . time() . '@placeholder.com';
             $user->phone = $request->input('phone');
             $user->birth_date = $request->filled('birth_date') ? $request->input('birth_date') : null;
             $user->is_pwd = $request->boolean('is_priority');
+            $user->resident_number = null; // Set resident_number to null
             $user->password = bcrypt('password'); // Set a default password
             $user->role_as = '0'; // Regular user role
             $user->save();
@@ -146,15 +150,15 @@ class WalkInController extends Controller
     {
         // If department has a code attribute, use that
         if (!empty($department->code)) {
-            return strtoupper(substr($department->code, 0, 1));
+            return strtoupper(substr($department->code, 0, 2));
         }
         
         // If department has a name attribute, use the first letter
         if (!empty($department->name)) {
-            return strtoupper(substr($department->name, 0, 1));
+            return strtoupper(substr($department->name, 0, 2));
         }
         
         // Default prefix if no name or code is available
-        return 'T';
+        return 'TK';
     }
 }
