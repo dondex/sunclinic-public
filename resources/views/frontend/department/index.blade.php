@@ -1,14 +1,14 @@
 @extends('layouts.app-nonav')
 
-@section('title', 'Obeid Hospital')
+@section('title', 'Sun Clinic Hospital')
 
 @section('content')
 
-<div class="container-fluid bg-blue p-1">
+<div class="container-fluid bg-green p-1">
     <div class="row mx-2">
         <div class="d-flex align-items-center justify-content-between">
             <div>
-                <a href="{{ url('/') }}" class="btn btn-primary btn-sm shadow-sm my-3">
+                <a href="{{ url('all-department') }}" class="btn btn-success btn-sm shadow-sm my-3">
                     <i class="fas fa-chevron-left text-white p-2"></i>
                 </a>
             </div>
@@ -49,7 +49,7 @@
            
 
             <div>
-                <button class="btn btn-primary text-white">
+                <button class="btn btn-success text-white">
                     <a style="text-decoration: none;" class="text-white" href="{{ url('set-appointment/' . Auth::id()) }}">Book Appointment Now!</a>
                 </button>
             </div>

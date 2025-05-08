@@ -21,6 +21,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('medical/{user_id}', [App\Http\Controllers\Frontend\MedicalRecordController::class, 'index']);
     Route::get('lab-result/{user_id}', [App\Http\Controllers\Frontend\LabResultController::class, 'index']);
+
     Route::get('department/{department_id}', [App\Http\Controllers\Frontend\SingleDeptController::class, 'index']);
     Route::get('my-appointment/{user_id}', [App\Http\Controllers\Frontend\MyAppointmentController::class, 'index']);
 
@@ -42,6 +43,10 @@ Route::middleware('auth')->group(function () {
 
 // Public Display
 Route::get('queue-display', [App\Http\Controllers\Frontend\TicketQueueController::class, 'displayQueue'])->name('queue.display');
+
+Route::get('about', [App\Http\Controllers\Frontend\AboutController::class, 'index']);
+
+Route::get('all-department', [App\Http\Controllers\Frontend\AllDepartmentController::class, 'index']);
 
 // Monitor Routes
 Route::middleware(['auth', 'is_monitor'])->group(function () {

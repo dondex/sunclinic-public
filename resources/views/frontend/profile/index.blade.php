@@ -4,11 +4,11 @@
 
 @section('content')
 
-<div class="container-fluid bg-blue p-1">
+<div class="container-fluid bg-green p-1">
     <div class="row mx-2">
         <div class="d-flex align-items-center justify-content-between">
             <div>
-                <a href="{{ url('/') }}" class="btn btn-primary btn-sm shadow-sm my-3">
+                <a href="{{ url('/') }}" class="btn btn-success btn-sm shadow-sm my-3">
                     <i class="fas fa-chevron-left text-white p-2"></i>
                 </a>
             </div>
@@ -48,7 +48,7 @@
                 <p class="text-capitalize"><strong>Address:</strong> {{ $records->first()->address }}</p>
                 <p class="text-capitalize"><strong>Gender:</strong> {{ $records->first()->gender }}</p>
 
-                <a href="{{ url('profile/edit/' . $user->id) }}" class="btn btn-primary btn-sm mt-3 p-2">
+                <a href="{{ url('profile/edit/' . $user->id) }}" class="btn btn-success btn-sm mt-3 p-2">
                     <i class="fas fa-edit"></i> Edit Profile
                 </a>
                 

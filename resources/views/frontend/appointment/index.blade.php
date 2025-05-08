@@ -1,14 +1,14 @@
-@extends('layouts.app-nonav')
+@extends('layouts.app')
 
 @section('title', 'Obeid Hospital')
 
 @section('content')
 
-<div class="container-fluid bg-blue p-1">
+<div class="container-fluid bg-green p-1">
     <div class="row mx-2">
         <div class="d-flex align-items-center justify-content-between">
             <div>
-                <a href="{{ url('/') }}" class="btn btn-primary btn-sm shadow-sm my-3">
+                <a href="{{ url('/') }}" class="btn btn-success btn-sm shadow-sm my-3">
                     <i class="fas fa-chevron-left text-white p-2"></i>
                 </a>
             </div>
@@ -36,10 +36,10 @@
                 <span>{{ $appointment->department->name }}</span>
                 <div class="d-flex flex-column py-1">
                     <span>
-                        <i class="fas fa-calendar text-primary mr-2"></i>{{ \Carbon\Carbon::parse($appointment->appointment_date_time)->format('l') }} | {{ \Carbon\Carbon::parse($appointment->appointment_date_time)->format('Y-m-d') }}
+                        <i class="fas fa-calendar text-success mr-2"></i>{{ \Carbon\Carbon::parse($appointment->appointment_date_time)->format('l') }} | {{ \Carbon\Carbon::parse($appointment->appointment_date_time)->format('Y-m-d') }}
                     </span>
                     <span>
-                        <i class="fas fa-clock text-primary mr-2"></i>{{ \Carbon\Carbon::parse($appointment->appointment_time)->format('g:i A') }}
+                        <i class="fas fa-clock text-success mr-2"></i>{{ \Carbon\Carbon::parse($appointment->appointment_time)->format('g:i A') }}
                     </span>
                 </div>
             </div>

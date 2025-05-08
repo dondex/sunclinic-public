@@ -200,7 +200,7 @@
 </div>
 
 <div class="main-card">
-    <div class="card-item">
+    <div class="card-item item-center">
         <a href="@auth {{ url('set-appointment/' . Auth::id()) }} @else {{ route('login') }} @endauth" style="text-decoration: none; color: inherit;">
             <div class="card-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#007a3d" stroke-width="2">
@@ -234,6 +234,9 @@
     
     
     <div class="services-grid">
+      
+       
+
         <div class="service-item">
             <div class="service-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -244,35 +247,63 @@
             </div>
             <div class="service-name">Notifications</div>
         </div>
-        <div class="service-item">
-            <div class="service-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="8" r="7"></circle>
-                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+
+        <a href="{{ url('about') }}" style="text-decoration: none; color: inherit;">
+            <div class="service-item">
+                <div class="service-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48" height="48" aria-label="Hospital icon" role="img">
+                    <rect x="3" y="7" width="18" height="14" rx="2" ry="2"></rect>
+                    <line x1="12" y1="11" x2="12" y2="19"></line>
+                    <line x1="9" y1="15" x2="15" y2="15"></line>
                 </svg>
+
+                </div>
+                <div class="service-name">About Sun Clinic</div>
             </div>
-            <div class="service-name">SMC Services</div>
-        </div>
-        <div class="service-item">
-            <div class="service-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
+        </a>
+
+        <a href="@auth {{ url('lab-result/' . Auth::id()) }} @else {{ route('login') }} @endauth" style="text-decoration: none; color: inherit;">
+            <div class="service-item">
+                <div class="service-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48" height="48" aria-label="Lab result icon" role="img">
+                    <rect x="9" y="2" width="6" height="4" rx="1" ry="1"></rect>
+                    <path d="M9 6h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"></path>
+                    <polyline points="9 12 11 14 15 10"></polyline>
                 </svg>
+
+                </div>
+                <div class="service-name">Investigation Result</div>
             </div>
-            <div class="service-name">Contact Us</div>
-        </div>
+        </a>
         
-        <div class="service-item">
-            <div class="service-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                    <path d="M9 22V12h6v10"></path>
-                    <path d="M12 7v0"></path>
-                </svg>
+        <a href="@auth {{ url('my-appointment/' . Auth::id()) }} @else {{ route('login') }} @endauth" style="text-decoration: none; color: inherit;">
+            <div class="service-item">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <div class="service-name">My Appointment</div>
             </div>
-            <div class="service-name">Home Health Care</div>
-        </div>
+        </a>
+
+
+        <a href="{{ url('all-department') }}" style="text-decoration: none; color: inherit;">
+            <div class="service-item">
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <path d="M9 22V12h6v10"></path>
+                        <path d="M12 7v0"></path>
+                    </svg>
+                </div>
+                <div class="service-name">Our Department</div>
+            </div>
+        </a>
+
         <div class="service-item">
             <div class="service-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -283,32 +314,12 @@
             </div>
             <div class="service-name">Virtual Consultation</div>
         </div>
-        <div class="service-item">
-            <div class="service-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                </svg>
-            </div>
-            <div class="service-name">Nearest Appointment</div>
-        </div>
+
+        
     </div>
 
 
-<div class="services-grid department-section">
-    @foreach($department as $dept)
-        <div class="service-item">
-            <a href="{{ url('department/' . $dept->id) }}" style="text-decoration: none; color: inherit;">
-                <div class="service-icon">
-                    <i class="{{ $dept->icon }}" style="font-size: 32px; color: #007a3d;"></i>
-                </div>
-                <div class="service-name">{{ $dept->name }}</div>
-            </a>
-        </div>
-    @endforeach
-</div>
+
 
 
 

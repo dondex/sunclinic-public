@@ -31,6 +31,9 @@
         .bg-blue{
             background-color: #233890;
         }
+        .bg-green{
+            background: linear-gradient(135deg, #007a3d 0%, #009f4d 100%);
+        }
  
         
         .icon-size{

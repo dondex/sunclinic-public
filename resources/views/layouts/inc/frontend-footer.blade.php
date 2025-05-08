@@ -1,5 +1,5 @@
-<footer class="footer mt-5 sticky-bottom shadow-sm bg-blue rounded mx-1">
-<div class="bottom-nav">
+<footer class="footer mt-5">
+<div class="bottom-nav mt-5 sticky-bottom shadow-sm  rounded mx-1">
     <div class="nav-item active">
         <a href="{{ url('/') }}">
             <div class="nav-icon">

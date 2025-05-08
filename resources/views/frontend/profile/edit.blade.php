@@ -4,11 +4,11 @@
 
 @section('content')
 
-<div class="container-fluid bg-blue p-1">
+<div class="container-fluid bg-green p-1">
     <div class="row mx-2">
         <div class="d-flex align-items-center justify-content-between">
             <div>
-                <a href="{{ url('profile/' . Auth::id()) }}" class="btn btn-primary btn-sm shadow-sm my-3">
+                <a href="{{ url('profile/' . Auth::id()) }}" class="btn btn-success btn-sm shadow-sm my-3">
                     <i class="fas fa-chevron-left text-white p-2"></i>
                 </a>
             </div>
@@ -43,7 +43,7 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
+                <button type="submit" class="btn btn-success mt-3">Save Changes</button>
             </form>
         </div>
     </div>
