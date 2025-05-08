@@ -211,7 +211,7 @@
                     <circle cx="9" cy="16" r="2"></circle>
                 </svg>
             </div>
-            <div class="card-title">Book Appointment</div>
+            <div style="text-align: start;" class="card-title">Book Appointment</div>
         </a>
     </div>
 
@@ -225,7 +225,7 @@
                     <path d="M16 14h.01"></path>
                 </svg>
             </div>
-            <div class="card-title">My Medical File</div>
+            <div style="text-align: start;" class="card-title">My Medical File</div>
         </a>
     </div>
 </div>
@@ -312,8 +312,12 @@
                     <line x1="12" y1="17" x2="12" y2="21"></line>
                 </svg>
             </div>
-            <div class="service-name">Virtual Consultation</div>
+            <div class="service-name">
+                Virtual Consultation 
+                <span class="badge bg-warning text-dark ms-2">Coming Soon</span>
+            </div>
         </div>
+
 
         
     </div>
