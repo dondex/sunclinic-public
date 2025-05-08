@@ -26,7 +26,9 @@ class AddSourceToTicketsTable extends Migration
     public function down()
     {
         Schema::table('tickets', function (Blueprint $table) {
-            $table->dropColumn('source');
+            if (Schema::hasColumn('tickets', 'source')) {
+                $table->dropColumn('source');
+            }
         });
     }
 }
