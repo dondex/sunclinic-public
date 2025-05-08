@@ -20,7 +20,7 @@ class TicketQueueController extends Controller
 
         // Check if user owns this ticket or is admin/staff
         if (Auth::user()->id != $ticket->patient_id && Auth::user()->role_as != '1') {
-            return redirect()->back()->with('error', 'Unauthorized access.');
+            return redirect()->back()->with('error', 'Unauthorized access. You can only view your own tickets.');
         }
 
         // Get tickets ahead in the queue (same department, same priority, created earlier)
@@ -38,7 +38,7 @@ class TicketQueueController extends Controller
                         ->take(3)
                         ->get();
 
-        // Get priority tickets
+        // Get priority ticket
         $priorityTicket = Ticket::with(['department', 'doctor'])
                         ->where('status', 'waiting')
                         ->where('priority', 'priority')
@@ -66,11 +66,14 @@ class TicketQueueController extends Controller
 
         // Verify user is accessing their own tickets
         if ($user_id && $user->id != $user_id && $user->role_as != '1') {
-            return redirect()->back()->with('error', 'Unauthorized access.');
+            return redirect()->back()->with('error', 'Unauthorized access. You can only view your own tickets.');
         }
 
+        // If user_id not specified, use logged in user's ID
+        $patientId = $user_id ?: $user->id;
+        
         $tickets = Ticket::with(['department', 'doctor'])
-                    ->where('patient_id', $user->id)
+                    ->where('patient_id', $patientId)
                     ->orderBy('created_at', 'desc')
                     ->paginate(10);
 
@@ -80,30 +83,30 @@ class TicketQueueController extends Controller
     /**
      * Check status of a specific ticket via AJAX
      */
-   public function checkStatus($id)
-{
-    $ticket = Ticket::with(['department', 'doctor'])
-        ->where('id', $id)
-        ->first();
+    public function checkStatus($id)
+    {
+        $ticket = Ticket::with(['department', 'doctor'])
+            ->where('id', $id)
+            ->first();
 
-    if (!$ticket) {
-        return response()->json(['error' => 'Ticket not found'], 404);
+        if (!$ticket) {
+            return response()->json(['error' => 'Ticket not found'], 404);
+        }
+
+        // Authorization check
+        if (Auth::guest() || 
+            (Auth::user()->id !== $ticket->patient_id && 
+             Auth::user()->role_as !== 1)) {
+            return response()->json(['error' => 'Unauthorized. You can only check status of your own tickets.'], 403);
+        }
+
+        return response()->json([
+            'status' => $ticket->status,
+            'department' => $ticket->department->name,
+            'doctor' => $ticket->doctor->name,
+            'updated_at' => $ticket->updated_at->toISOString()
+        ]);
     }
-
-    // Authorization check
-    if (Auth::guest() || 
-        (Auth::user()->id !== $ticket->patient_id && 
-         Auth::user()->role_as !== 1)) {
-        return response()->json(['error' => 'Unauthorized'], 403);
-    }
-
-    return response()->json([
-        'status' => $ticket->status,
-        'department' => $ticket->department->name,
-        'doctor' => $ticket->doctor->name,
-        'updated_at' => $ticket->updated_at->toISOString()
-    ]);
-}
 
     /**
      * Display the public queue

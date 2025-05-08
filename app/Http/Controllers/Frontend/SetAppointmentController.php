@@ -23,6 +23,17 @@ class SetAppointmentController extends Controller
             return redirect()->back()->with('error', 'Unauthorized access.');
         }
 
+        // Check if user already has an active ticket
+        $activeTicket = Ticket::where('patient_id', $user->id)
+                         ->whereIn('status', ['waiting', 'processing'])
+                         ->first();
+                         
+        if ($activeTicket) {
+            // Directly redirect to ticket view page instead of showing the form with a button
+            return redirect()->route('ticket.show', $activeTicket->id)
+                   ->with('message', 'You already have an active ticket. Your ticket number is ' . $activeTicket->ticket_number);
+        }
+
         // Get all departments
         $departments = Department::all();
 
@@ -48,10 +59,22 @@ class SetAppointmentController extends Controller
             'appointment_date_time' => 'required|date',
             'appointment_time' => 'required|string|max:10',
         ]);
+        
+        // Check if user already has an active ticket
+        $userId = $request->input('user_id');
+        $activeTicket = Ticket::where('patient_id', $userId)
+                         ->whereIn('status', ['waiting', 'processing'])
+                         ->first();
+                         
+        if ($activeTicket) {
+            // Directly redirect to ticket view page instead of showing feedback first
+            return redirect()->route('ticket.show', $activeTicket->id)
+                   ->with('message', 'You already have an active ticket. Your ticket number is ' . $activeTicket->ticket_number);
+        }
 
         // Create a new appointment instance
         $appointment = new Appointment();
-        $appointment->user_id = $request->input('user_id');
+        $appointment->user_id = $userId;
         $appointment->department_id = $request->input('department_id');
         $appointment->doctor_id = $request->input('doctor_id');
         $appointment->subject = $request->input('subject');
@@ -131,7 +154,7 @@ class SetAppointmentController extends Controller
             ->orderBy('id', 'desc')
             ->first();
             
-        $number = $latestTicket ? intval(substr($latestTicket->ticket_number, 2)) + 1 : 1;
+        $number = $latestTicket ? intval(substr($latestTicket->ticket_number, 3)) + 1 : 1;
         return $prefix . '-' . str_pad($number, 3, '0', STR_PAD_LEFT);
     }
 
