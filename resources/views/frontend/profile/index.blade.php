@@ -1,23 +1,22 @@
-@extends('layouts.app-nonav')
+@extends('layouts.app')
 
 @section('title', 'Obeid Hospital')
 
 @section('content')
 
-<div class="container-fluid bg-green p-1">
-    <div class="row mx-2">
-        <div class="d-flex align-items-center justify-content-between">
-            <div>
-                <a href="{{ url('/') }}" class="btn btn-success btn-sm shadow-sm my-3">
-                    <i class="fas fa-chevron-left text-white p-2"></i>
-                </a>
+<div class="section-bg pb-5">
+    <section>
+        <div class="container">
+            <div class="row bg-img-profile row-space row-radius1 ">
+                <div class="col-6 ">
+                    <!-- <i class="fas fa-book icon-header"></i> -->
+                </div>
+                <!-- <div class="col-6 ">
+                    <h3 class="text-center">Book Appointment</h3>
+                </div> -->
             </div>
-            <div class="text-center">
-                <h5 class="text-white">Patients Profile</h5>
-            </div>
-            
         </div>
-    </div>
+    </section>
 
     
     @if(session('message'))
@@ -26,6 +25,16 @@
 
     @if(session('error'))
         <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
+
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
     @endif
 
     <div class="row m-3 bg-white px-1 py-4 rounded">
@@ -52,16 +61,52 @@
                     <i class="fas fa-edit"></i> Edit Profile
                 </a>
                 
-            @else
-                <p><strong>Phone Number:</strong>Not available</p>
-                <p><strong>Birthday:</strong>Not available</p>
-                <p><strong>Address:</strong> Not available</p>
-                <p><strong>Gender:</strong> Not available</p>
+                @else
+                    <p><strong>Phone Number:</strong> Not available</p>
+                    <p><strong>Birthday:</strong> Not available</p>
+                    <p><strong>Address:</strong> Not available</p>
+                    <p><strong>Gender:</strong> Not available</p>
 
-                <a href="{{ url('profile/create/' . $user->id) }}" class="btn btn-success btn-sm mt-3 p-2">
-                    <i class="fas fa-plus"></i> Create Profile
-                </a>
-            @endif
+                    <hr>
+
+                    <h4 class="mt-4">Create Profile</h4>
+                    <form action="{{ url('profile/add/' . $user->id) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                        <div class="form-group">
+                            <label for="profile_image">Profile Image</label>
+                            <input type="file" name="profile_image" id="profile_image" class="form-control" accept="image/*">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone_number">Phone Number</label>
+                            <input type="text" name="phone_number" id="phone_number" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="birthday">Birthday</label>
+                            <input type="date" name="birthday" id="birthday" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <textarea name="address" id="address" class="form-control" rows="3" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select name="gender" id="gender" class="form-control" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success btn-sm mt-3 p-2">
+                            <i class="fas fa-plus"></i> Create Profile
+                        </button>
+                    </form>
+                @endif
 
           
 

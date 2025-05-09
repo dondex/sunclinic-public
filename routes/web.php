@@ -18,6 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::get('profile/{user_id}', [App\Http\Controllers\Frontend\ProfileController::class, 'index']);
     Route::get('profile/edit/{user_id}', [App\Http\Controllers\Frontend\ProfileController::class, 'edit']);
     Route::put('profile/update/{user_id}', [App\Http\Controllers\Frontend\ProfileController::class, 'update']);
+    Route::post('profile/add/{user_id}', [App\Http\Controllers\Frontend\ProfileController::class, 'store']);
 
     Route::get('medical/{user_id}', [App\Http\Controllers\Frontend\MedicalRecordController::class, 'index']);
     Route::get('lab-result/{user_id}', [App\Http\Controllers\Frontend\LabResultController::class, 'index']);
