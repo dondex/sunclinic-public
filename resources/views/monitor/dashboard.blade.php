@@ -45,10 +45,10 @@
     <div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
         <div class="text-center">
             <div class="clinic-info mb-4">
-                <!-- <img src="{{ asset('https://www.suncitypolyclinicsa.com/public/media/uploads/logo-favicon/173183818125.png') }}" alt="Clinic Logo" class="logo"> -->
-                <img src="{{ asset('uploads/obeid-logo.png') }}" alt="Clinic Logo" class="logo">
-                <!-- <h2 class="mt-3">Sun City's Polyclinic & Family Clinic</h2> -->
-                <h2 class="mt-3">Obeid Hospital</h2>
+                <img src="{{ asset('https://www.suncitypolyclinicsa.com/public/media/uploads/logo-favicon/173183818125.png') }}" alt="Clinic Logo" class="logo">
+                <!-- <img src="{{ asset('uploads/obeid-logo.png') }}" alt="Clinic Logo" class="logo"> -->
+                <h2 class="mt-3">Sun City's Polyclinic & Family Clinic</h2>
+                <!-- <h2 class="mt-3">Obeid Hospital</h2> -->
             </div>
 
             <div class="card p-5 mb-4">
