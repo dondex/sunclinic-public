@@ -15,8 +15,10 @@
             
             <div class="card" id="ticket-container" data-ticket-id="{{ $ticket->id }}">
                 <div class="card-header text-center">
-                    <img src="{{ asset('uploads/sunclinic.png') }}" alt="Sun City's" class="img-fluid" style="max-height: 80px;">
-                    <h3 class="mt-2">Sun City's Polyclinic & Family Clinic</h3>
+                    <!-- <img src="{{ asset('uploads/sunclinic.png') }}" alt="Sun City's" class="img-fluid" style="max-height: 80px;"> -->
+                    <img src="{{ asset('uploads/obeid-logo.png') }}" alt="Sun City's" class="img-fluid" style="max-height: 80px;">
+                    <!-- <h3 class="mt-2">Sun City's Polyclinic & Family Clinic</h3> -->
+                    <h3 class="mt-2">Obeid Hospital</h3>
                 </div>
                 
                 <div class="card-body d-flex justify-content-center align-items-center">
@@ -65,7 +67,8 @@
                 </div>
                 
                 <div class="card-footer text-center">
-                    <h5 class="mb-0">Welcome to Sun City Hospital</h5>
+                    <!-- <h5 class="mb-0">Welcome to Sun City Hospital</h5> -->
+                    <h5 class="mb-0">Welcome to Obeid Hospital</h5>
                 </div>
             </div>
         </div>

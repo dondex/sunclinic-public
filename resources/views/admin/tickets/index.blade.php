@@ -4,8 +4,10 @@
 <div class="container-fluid py-4">
     <div class="row justify-content-center mb-4">
         <div class="col-12 text-center">
-            <img src="{{ asset('https://www.suncitypolyclinicsa.com/public/media/uploads/logo-favicon/173183818125.png') }}" alt="Sun City's" class="img-fluid" style="max-height: 60px;">
-            <h2 class="mt-2">Sun City's Polyclinic & Family Clinic</h2>
+            <!-- <img src="{{ asset('https://www.suncitypolyclinicsa.com/public/media/uploads/logo-favicon/173183818125.png') }}" alt="Sun City's" class="img-fluid" style="max-height: 60px;"> -->
+            <img src="{{ asset('uploads/obeid-logo.png') }}" alt="Sun City's" class="img-fluid" style="max-height: 60px;">
+            <!-- <h2 class="mt-2">Sun City's Polyclinic & Family Clinic</h2> -->
+            <h2 class="mt-2">Obeid Hospital</h2>
         </div>
     </div>
 

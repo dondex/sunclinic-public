@@ -22,7 +22,8 @@
             </svg>
 
             </div>
-            <span>About SunClinic</span>
+            <!-- <span>About SunClinic</span> -->
+            <span>About Obeid</span>
         </a>
     </div>
 

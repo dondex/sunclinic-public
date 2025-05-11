@@ -41,7 +41,7 @@
                         </div>
 
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg">
+                            <button type="submit" class="btn btn-success btn-lg">
                                 {{ __('Login') }}
                             </button>
                         </div>
