@@ -23,8 +23,8 @@
                 <div>
                     <a class="navbar-brand" href="{{ url('/') }}">
                         <!-- {{ config('app.name', 'Laravel') }} -->
-                        <img class="img-fluid" width="150px" height="150px"  src="{{asset('uploads/sunclinic.png') }}" alt="">
-                        <!-- <img class="img-fluid" width="150px" height="150px"  src="{{asset('uploads/obeid-logo.png') }}" alt=""> -->
+                        <!-- <img class="img-fluid" width="150px" height="150px"  src="{{asset('uploads/sunclinic.png') }}" alt=""> -->
+                        <img class="img-fluid" width="150px" height="150px"  src="{{asset('uploads/obeid-logo.png') }}" alt="">
                     </a>
                 </div>
 
