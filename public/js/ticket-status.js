@@ -1,5 +1,5 @@
 /**
- * Real-time Ticket Status Updater with Exponential Backoff
+ * Real-time Ticket Status Updater with Optimized Polling
  */
 $(document).ready(function() {
     const ticketContainer = $('#ticket-container');
@@ -8,6 +8,7 @@ $(document).ready(function() {
     let retryCount = 0;
     const maxRetries = 5;
     const baseDelay = 1000;
+    const normalPollingInterval = 1000;
 
     function fetchStatus() {
         $.ajax({
@@ -17,15 +18,15 @@ $(document).ready(function() {
             cache: false,
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                'x-csrf-token': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response) {
-                retryCount = 0; // Reset retry counter on success
-                if (response.status !== currentStatus) {
-                    currentStatus = response.status;
-                    updateTicketUI(response);
+                retryCount = 0;
+                if (response.ticket.status !== currentStatus) {
+                    currentStatus = response.ticket.status;
+                    updateTicketUI(response.ticket);
                 }
-                scheduleNextCheck(500); // Normal polling interval
+                scheduleNextCheck(normalPollingInterval);
             },
             error: function(xhr, status, error) {
                 console.error('Status check failed:', error);
@@ -35,6 +36,7 @@ $(document).ready(function() {
                     scheduleNextCheck(delay);
                 } else {
                     console.error('Max retries reached. Stopping updates.');
+                    showConnectionError();
                 }
             }
         });
@@ -51,22 +53,24 @@ $(document).ready(function() {
             waiting: '<span class="badge bg-warning text-dark">Waiting</span>'
         };
 
-        // Update status badge
-        $('.ticket-status').html(statusBadges[ticketData.status]);
+        // Animate status change
+        $('.ticket-status').fadeOut(200, function() {
+            $(this).html(statusBadges[ticketData.status]).fadeIn(200);
+        });
 
-        // Handle notifications
+        // Update notifications
         const alerts = {
             processing: `
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <strong>Your ticket is now being processed!</strong>
-                    <p>Please proceed to Department ${ticketData.department} to see Dr. ${ticketData.doctor}</p>
+                    <p>Please proceed to Department ${ticketData.department.name}</p>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             `,
             completed: `
                 <div class="alert alert-info alert-dismissible fade show" role="alert">
                     <strong>Appointment Completed!</strong>
-                    <p>Thank you for choosing Sun City Hospital.</p>
+                    <p>Thank you for choosing our clinic.</p>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             `
@@ -74,15 +78,44 @@ $(document).ready(function() {
 
         if (alerts[ticketData.status]) {
             $('.alert-container').html(alerts[ticketData.status]);
-            if (document.getElementById('notification-sound')) {
-                new Audio(document.getElementById('notification-sound').src).play()
-                    .catch(e => console.log('Audio play failed:', e));
-            }
-            ticketContainer.addClass('bg-success-subtle');
-            setTimeout(() => ticketContainer.removeClass('bg-success-subtle'), 3000);
+            playNotificationSound();
+            highlightTicket();
         }
 
-        // WebSocket fallback
+        // Update priority lane if needed
+        if (ticketData.priority === 'priority') {
+            $('.priority-section').removeClass('d-none');
+        }
+    }
+
+    function playNotificationSound() {
+        const sound = document.getElementById('notification-sound');
+        if (sound) {
+            sound.play().catch(e => console.log('Audio play failed:', e));
+        }
+    }
+
+    function highlightTicket() {
+        ticketContainer.addClass('bg-success-subtle');
+        setTimeout(() => ticketContainer.removeClass('bg-success-subtle'), 3000);
+    }
+
+    function showConnectionError() {
+        $('.alert-container').html(`
+            <div class="alert alert-danger alert-dismissible fade show">
+                <strong>Connection lost!</strong> Updates paused. Please refresh the page.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `);
+    }
+
+    // Initialize
+    if (ticketId) {
+        fetchStatus();
+        setupWebsocket();
+    }
+
+    function setupWebsocket() {
         if (typeof Echo !== 'undefined') {
             window.Echo.private(`ticket.${ticketId}`)
                 .listen('.status-updated', (data) => {
@@ -92,11 +125,5 @@ $(document).ready(function() {
                     }
                 });
         }
-    }
-
-    // Initial check
-    if (ticketId) {
-        fetchStatus();
-        scheduleNextCheck(500);
     }
 });

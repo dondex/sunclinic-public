@@ -14,7 +14,7 @@ class Ticket extends Model
         'department_id',
         'doctor_id',
         'patient_id',
-        'priority',
+        'is_priority',
         'status',
         'position',
         'source', // New field to track if ticket is from appointment or walk-in

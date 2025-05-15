@@ -81,31 +81,76 @@ class TicketQueueController extends Controller
     }
 
     /**
-     * Check status of a specific ticket via AJAX
+     * Check status of a specific ticket via AJAX - Enhanced for real-time updates
      */
     public function checkStatus($id)
     {
-        $ticket = Ticket::with(['department', 'doctor'])
-            ->where('id', $id)
-            ->first();
+        try {
+            $ticket = Ticket::with(['department', 'doctor'])->findOrFail($id);
 
-        if (!$ticket) {
-            return response()->json(['error' => 'Ticket not found'], 404);
+            // Authorization check
+            if (Auth::guest() || 
+                (Auth::user()->id !== $ticket->patient_id && 
+                 Auth::user()->role_as !== 1)) {
+                return response()->json([
+                    'error' => 'Unauthorized. You can only check status of your own tickets.'
+                ], 403);
+            }
+
+            // Calculate queue position for waiting tickets
+            $queuePosition = null;
+            $peopleAhead = 0;
+            $estimatedWaitTime = 0;
+
+            if ($ticket->status === 'waiting') {
+                // Count tickets ahead in same department with lower position
+                $peopleAhead = Ticket::where('department_id', $ticket->department_id)
+                    ->where('status', 'waiting')
+                    ->where('position', '<', $ticket->position)
+                    ->count();
+
+                // Calculate estimated wait time (assuming 15 minutes per patient)
+                $estimatedWaitTime = $peopleAhead * 15;
+                $queuePosition = $peopleAhead + 1;
+            }
+
+            // Get currently processing ticket for this department
+            $currentlyProcessing = Ticket::with(['department', 'doctor'])
+                ->where('department_id', $ticket->department_id)
+                ->where('status', 'processing')
+                ->first();
+
+            return response()->json([
+                'success' => true,
+                'ticket' => [
+                    'id' => $ticket->id,
+                    'ticket_number' => $ticket->ticket_number,
+                    'status' => $ticket->status,
+                    'priority' => $ticket->priority,
+                    'department' => $ticket->department->name,
+                    'doctor' => $ticket->doctor->name,
+                    'position' => $ticket->position,
+                    'queue_position' => $queuePosition,
+                    'people_ahead' => $peopleAhead,
+                    'estimated_wait_time' => $estimatedWaitTime,
+                    'created_at' => $ticket->created_at->toISOString(),
+                    'updated_at' => $ticket->updated_at->toISOString()
+                ],
+                'currently_processing' => $currentlyProcessing ? [
+                    'ticket_number' => $currentlyProcessing->ticket_number,
+                    'department' => $currentlyProcessing->department->name,
+                    'doctor' => $currentlyProcessing->doctor->name
+                ] : null,
+                'timestamp' => now()->toISOString()
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to fetch ticket status',
+                'message' => $e->getMessage()
+            ], 500);
         }
-
-        // Authorization check
-        if (Auth::guest() || 
-            (Auth::user()->id !== $ticket->patient_id && 
-             Auth::user()->role_as !== 1)) {
-            return response()->json(['error' => 'Unauthorized. You can only check status of your own tickets.'], 403);
-        }
-
-        return response()->json([
-            'status' => $ticket->status,
-            'department' => $ticket->department->name,
-            'doctor' => $ticket->doctor->name,
-            'updated_at' => $ticket->updated_at->toISOString()
-        ]);
     }
 
     /**

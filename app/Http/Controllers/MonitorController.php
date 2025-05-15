@@ -20,14 +20,39 @@ class MonitorController extends Controller
      */
     public function currentTicket()
     {
-        $currentTicket = Ticket::with(['department', 'doctor'])
+        // Get current priority ticket
+        $priorityTicket = Ticket::with(['department', 'doctor'])
             ->where('status', 'processing')
+            ->where('is_priority', true)
             ->first();
+            
+        // Get current regular ticket
+        $regularTicket = Ticket::with(['department', 'doctor'])
+            ->where('status', 'processing')
+            ->where('is_priority', false)
+            ->first();
+            
+        // Count waiting tickets in both queues
+        $priorityWaitingCount = Ticket::where('status', 'waiting')
+            ->where('is_priority', true)
+            ->count();
+            
+        $regularWaitingCount = Ticket::where('status', 'waiting')
+            ->where('is_priority', false)
+            ->count();
 
         return response()->json([
-            'ticket_number' => $currentTicket->ticket_number ?? null,
-            'department' => $currentTicket->department->name ?? 'N/A',
-            'doctor' => $currentTicket->doctor->name ?? 'N/A'
+            // Priority queue data
+            'priority_ticket_number' => $priorityTicket->ticket_number ?? null,
+            'priority_department' => $priorityTicket->department->name ?? 'N/A',
+            'priority_doctor' => $priorityTicket->doctor->name ?? 'N/A',
+            'priority_waiting_count' => $priorityWaitingCount,
+            
+            // Regular queue data
+            'regular_ticket_number' => $regularTicket->ticket_number ?? null,
+            'regular_department' => $regularTicket->department->name ?? 'N/A',
+            'regular_doctor' => $regularTicket->doctor->name ?? 'N/A',
+            'regular_waiting_count' => $regularWaitingCount
         ]);
     }
 }

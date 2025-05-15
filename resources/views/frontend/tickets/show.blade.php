@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('head')
+<meta http-equiv="refresh" content="300"> <!-- Fallback refresh every 5 minutes -->
+@endsection
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -13,12 +17,12 @@
                 @endif
             </div>
             
-            <div class="card" id="ticket-container" data-ticket-id="{{ $ticket->id }}">
+            <div class="card" id="ticket-container" 
+                 data-ticket-id="{{ $ticket->id }}"
+                 data-initial-status="{{ $ticket->status }}">
                 <div class="card-header text-center">
                     <img src="{{ asset('uploads/sunclinic.png') }}" alt="Sun City's" class="img-fluid" style="max-height: 80px;">
-                    <!-- <img src="{{ asset('uploads/obeid-logo.png') }}" alt="Sun City's" class="img-fluid" style="max-height: 80px;"> -->
                     <h3 class="mt-2">Sun City's Polyclinic & Family Clinic</h3>
-                    <!-- <h3 class="mt-2">Obeid Hospital</h3> -->
                 </div>
                 
                 <div class="card-body d-flex justify-content-center align-items-center">
@@ -45,7 +49,7 @@
                             </div>
                         </div>
                         
-                        <!-- Priority Lane (if applicable) - Hidden by default unless needed -->
+                        <!-- Priority Lane  -->
                         <div class="col-md-12 text-center mt-3 {{ $ticket->priority == 'priority' || $priorityTicket ? 'bg-warning-subtle' : 'd-none' }}">
                             @if($priorityTicket)
                             <div class="priority-section">
@@ -67,16 +71,12 @@
                 </div>
                 
                 <div class="card-footer text-center">
-                    <!-- <h5 class="mb-0">Welcome to Sun City Hospital</h5> -->
-                    <h5 class="mb-0">Welcome to Obeid Hospital</h5>
+                    <h5 class="mb-0">Welcome to Sun City Hospital</h5>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<!-- Add notification sound -->
-<audio id="notification-sound" src="{{ asset('assets/sounds/notification.mp3') }}" preload="auto"></audio>
 
 <style>
     .card-body {
@@ -93,8 +93,17 @@
     .ticket-details {
         margin-top: 30px;
     }
+    .ticket-status .badge {
+        font-size: 2rem;
+        padding: 12px 24px;
+        display: inline-block;
+    }
     .bg-warning-subtle {
         background-color: #fff8e1;
+    }
+    .bg-success-subtle {
+        background-color: #d4edda;
+        transition: background-color 0.3s ease;
     }
     @media print {
         .btn, .alert {
@@ -111,5 +120,5 @@
 @endsection
 
 @section('scripts')
-<script src="{{ asset('js/ticket-status.js') }}"></script>
+<script src="{{ asset('js/ticket-status.js') }}?v={{ time() }}"></script>
 @endsection
