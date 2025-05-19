@@ -9,20 +9,6 @@
         </div>
     </div>
 
-    <!-- Action Buttons Moved Outside -->
-    <div class="row justify-content-center mb-4">
-        <div class="col-md-11 text-end">
-            <a href="{{ route('admin.dashboard') }}" class="btn btn-primary me-2">
-                Dashboard
-            </a>
-            <a href="{{ route('admin.tickets.restart') }}"
-               class="btn btn-warning"
-               onclick="return confirm('Are you sure you want to restart the queue? All processed tickets will be reset.')">
-                Restart Queue
-            </a>
-        </div>
-    </div>
-
     @if(session('success'))
     <div class="row justify-content-center mb-3">
         <div class="col-md-8">
@@ -38,8 +24,12 @@
     <div class="row justify-content-center">
         <div class="col-md-11">
             <div class="row g-4">
-                <!-- Left Section: Priority Queue -->
-                <div class="col-md-6">
+                <div class="d-flex justify-content-end mb-3">
+                    <a href="{{ url('admin/dashboard') }}" class="btn btn-outline-dark d-flex align-items-center shadow-sm">
+                    <i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+                 </div>
+                 <!-- Left Section: Priority Queue -->
+                <div class="col-lg-6 col-md-12">
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 d-flex justify-content-between align-items-center bg-danger text-white">
                             <h6 class="m-0 font-weight-bold">Priority Token Number</h6>
@@ -56,17 +46,20 @@
 
                             <div class="d-flex justify-content-center mb-3">
                                 <button type="button" class="btn btn-secondary me-2 previous-priority-btn" data-ticket-id="{{ $priorityCurrent->id }}">
-                                    Previous
+                                    <i class="fas fa-arrow-left d-sm-none"></i>
+                                    <span class="d-none d-sm-inline">Previous</span>
                                 </button>
                                 <button type="button" class="btn btn-primary next-priority-btn" data-ticket-id="{{ $priorityCurrent->id }}">
-                                    Next
+                                    <i class="fas fa-arrow-right d-sm-none"></i>
+                                    <span class="d-none d-sm-inline">Next</span>
                                 </button>
                             </div>
                             @else
                             <h1 class="display-3 text-muted">No active priority ticket</h1>
                             <div class="d-flex justify-content-center mt-4">
                                 <button type="button" class="btn btn-primary next-priority-btn" data-ticket-id="0">
-                                    Start Priority Queue
+                                    <i class="fas fa-play d-sm-none"></i>
+                                    <span class="d-none d-sm-inline">Start Priority Queue</span>
                                 </button>
                             </div>
                             @endif
@@ -75,7 +68,7 @@
                 </div>
 
                 <!-- Right Section: Regular Queue -->
-                <div class="col-md-6">
+                <div class="col-lg-6 col-md-12">
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 d-flex justify-content-between align-items-center bg-primary text-white">
                             <h6 class="m-0 font-weight-bold">Regular Token Number</h6>
@@ -92,20 +85,59 @@
 
                             <div class="d-flex justify-content-center mb-3">
                                 <button type="button" class="btn btn-secondary me-2 previous-regular-btn" data-ticket-id="{{ $regularCurrent->id }}">
-                                    Previous
+                                    <i class="fas fa-arrow-left d-sm-none"></i>
+                                    <span class="d-none d-sm-inline">Previous</span>
                                 </button>
                                 <button type="button" class="btn btn-primary next-regular-btn" data-ticket-id="{{ $regularCurrent->id }}">
-                                    Next
+                                    <i class="fas fa-arrow-right d-sm-none"></i>
+                                    <span class="d-none d-sm-inline">Next</span>
                                 </button>
                             </div>
                             @else
                             <h1 class="display-3 text-muted">No active regular ticket</h1>
                             <div class="d-flex justify-content-center mt-4">
                                 <button type="button" class="btn btn-primary next-regular-btn" data-ticket-id="0">
-                                    Start Regular Queue
+                                    <i class="fas fa-play d-sm-none"></i>
+                                    <span class="d-none d-sm-inline">Start Regular Queue</span>
                                 </button>
                             </div>
                             @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UPDATED: Redesigned Filter Section -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold">Filter Tickets</h6>
+                    <button id="apply-filters-btn" class="btn btn-sm btn-primary">
+                        <i class="fas fa-filter me-1"></i> Apply Filters
+                    </button>
+                </div>
+                <div class="card-body py-3">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="department-filter" class="form-label fw-bold">Department</label>
+                                <select id="department-filter" class="form-select">
+                                    <option value="">All Departments</option>
+                                    @foreach($departments as $department)
+                                    <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="doctor-filter" class="form-label fw-bold">Doctor</label>
+                                <select id="doctor-filter" class="form-select">
+                                    <option value="">All Doctors</option>
+                                    @foreach($doctors as $doctor)
+                                    <option value="{{ $doctor->id }}">Dr. {{ $doctor->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -117,53 +149,62 @@
                     <h6 class="m-0 font-weight-bold">Current Queue</h6>
                 </div>
                 <div class="card-body p-0">
-                    <table class="table table-hover mb-0">
-                        <thead>
-                            <tr>
-                                <th>Position</th>
-                                <th>Ticket #</th>
-                                <th>Department</th>
-                                <th>Doctor</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($regularTickets as $index => $ticket)
-                            <tr class="{{ ($regularCurrent && $ticket->id === $regularCurrent->id) ? 'table-primary' : '' }}">
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $ticket->ticket_number }}</td>
-                                <td>{{ $ticket->department->name }}</td>
-                                <td>Dr. {{ $ticket->doctor->name }}</td>
-                                <td>
-                                    @if($regularCurrent && $ticket->id === $regularCurrent->id)
-                                        <span class="badge bg-success">Processing</span>
-                                    @elseif($ticket->status === 'completed')
-                                        <span class="badge bg-secondary">Completed</span>
-                                    @else
-                                        <span class="badge bg-warning text-dark">Waiting</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($ticket->status !== 'processing')
-                                        <button class="btn btn-sm btn-outline-danger priority-btn" data-ticket-id="{{ $ticket->id }}">
-                                            Priority
-                                        </button>
-                                        <a href="{{ route('admin.tickets.show-specific', $ticket->id) }}" class="btn btn-sm btn-outline-primary">
-                                            Show
-                                        </a>
-                                    @endif
-                                </td>
-                            </tr>
-                            @endforeach
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0" id="regular-queue-table">
+                            <thead>
+                                <tr>
+                                    <th>Position</th>
+                                    <th>Ticket #</th>
+                                    <th>Department</th>
+                                    <th>Doctor</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($regularTickets as $index => $ticket)
+                                <tr class="{{ ($regularCurrent && $ticket->id === $regularCurrent->id) ? 'table-primary' : '' }}" 
+                                    data-department="{{ $ticket->department_id }}" 
+                                    data-doctor="{{ $ticket->doctor_id }}" 
+                                    data-ticket="{{ $ticket->ticket_number }}">
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $ticket->ticket_number }}</td>
+                                    <td>{{ $ticket->department->name }}</td>
+                                    <td>Dr. {{ $ticket->doctor->name }}</td>
+                                    <td>
+                                        @if($regularCurrent && $ticket->id === $regularCurrent->id)
+                                            <span class="badge bg-success">Processing</span>
+                                        @elseif($ticket->status === 'completed')
+                                            <span class="badge bg-secondary">Completed</span>
+                                        @else
+                                            <span class="badge bg-warning text-dark">Waiting</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-nowrap">
+                                            @if($ticket->status !== 'processing')
+                                                <button class="btn btn-sm btn-outline-danger priority-btn me-1" data-ticket-id="{{ $ticket->id }}">
+                                                    <i class="fas fa-exclamation-circle d-md-none"></i>
+                                                    <span class="d-none d-md-inline">Priority</span>
+                                                </button>
+                                                <a href="{{ route('admin.tickets.show-specific', $ticket->id) }}" class="btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-eye d-md-none"></i>
+                                                    <span class="d-none d-md-inline">Show</span>
+                                                </a>
+                                            @endif
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
 
-                            @if(count($regularTickets) == 0)
-                            <tr>
-                                <td colspan="6" class="text-center py-3">No regular tickets</td>
-                            </tr>
-                            @endif
-                        </tbody>
-                    </table>
+                                @if(count($regularTickets) == 0)
+                                <tr>
+                                    <td colspan="6" class="text-center py-3">No regular tickets</td>
+                                </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -173,53 +214,62 @@
                     <h6 class="m-0 font-weight-bold">Priority Queue</h6>
                 </div>
                 <div class="card-body p-0">
-                    <table class="table table-hover mb-0">
-                        <thead>
-                            <tr>
-                                <th>Position</th>
-                                <th>Ticket #</th>
-                                <th>Department</th>
-                                <th>Doctor</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($priorityTickets as $index => $ticket)
-                            <tr class="{{ ($priorityCurrent && $ticket->id === $priorityCurrent->id) ? 'table-danger' : '' }}">
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $ticket->ticket_number }}</td>
-                                <td>{{ $ticket->department->name }}</td>
-                                <td>Dr. {{ $ticket->doctor->name }}</td>
-                                <td>
-                                    @if($priorityCurrent && $ticket->id === $priorityCurrent->id)
-                                        <span class="badge bg-success">Processing</span>
-                                    @elseif($ticket->status === 'completed')
-                                        <span class="badge bg-secondary">Completed</span>
-                                    @else
-                                        <span class="badge bg-warning text-dark">Waiting</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($ticket->status !== 'processing')
-                                    <button class="btn btn-sm btn-outline-danger remove-priority-btn" data-ticket-id="{{ $ticket->id }}">
-                                        Remove Priority
-                                    </button>
-                                    <a href="{{ route('admin.tickets.show-specific', $ticket->id) }}" class="btn btn-sm btn-outline-primary">
-                                        Show
-                                    </a>
-                                    @endif
-                                </td>
-                            </tr>
-                            @endforeach
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0" id="priority-queue-table">
+                            <thead>
+                                <tr>
+                                    <th>Position</th>
+                                    <th>Ticket #</th>
+                                    <th>Department</th>
+                                    <th>Doctor</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($priorityTickets as $index => $ticket)
+                                <tr class="{{ ($priorityCurrent && $ticket->id === $priorityCurrent->id) ? 'table-danger' : '' }}"
+                                    data-department="{{ $ticket->department_id }}" 
+                                    data-doctor="{{ $ticket->doctor_id }}" 
+                                    data-ticket="{{ $ticket->ticket_number }}">
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $ticket->ticket_number }}</td>
+                                    <td>{{ $ticket->department->name }}</td>
+                                    <td>Dr. {{ $ticket->doctor->name }}</td>
+                                    <td>
+                                        @if($priorityCurrent && $ticket->id === $priorityCurrent->id)
+                                            <span class="badge bg-success">Processing</span>
+                                        @elseif($ticket->status === 'completed')
+                                            <span class="badge bg-secondary">Completed</span>
+                                        @else
+                                            <span class="badge bg-warning text-dark">Waiting</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-nowrap">
+                                            @if($ticket->status !== 'processing')
+                                            <button class="btn btn-sm btn-outline-danger remove-priority-btn me-1" data-ticket-id="{{ $ticket->id }}">
+                                                <i class="fas fa-minus-circle d-md-none"></i>
+                                                <span class="d-none d-md-inline">Remove</span>
+                                            </button>
+                                            <a href="{{ route('admin.tickets.show-specific', $ticket->id) }}" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-eye d-md-none"></i>
+                                                <span class="d-none d-md-inline">Show</span>
+                                            </a>
+                                            @endif
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
 
-                            @if(count($priorityTickets) == 0)
-                            <tr>
-                                <td colspan="6" class="text-center py-3">No priority tickets</td>
-                            </tr>
-                            @endif
-                        </tbody>
-                    </table>
+                                @if(count($priorityTickets) == 0)
+                                <tr>
+                                    <td colspan="6" class="text-center py-3">No priority tickets</td>
+                                </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -230,38 +280,43 @@
                 </div>
                 <div class="card-body p-0">
                     @if($completedTickets->count() > 0)
-                    <table class="table table-hover mb-0">
-                        <thead>
-                            <tr>
-                                <th>Ticket #</th>
-                                <th>Department</th>
-                                <th>Doctor</th>
-                                <th>Type</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($completedTickets as $ticket)
-                            <tr>
-                                <td>{{ $ticket->ticket_number }}</td>
-                                <td>{{ $ticket->department->name }}</td>
-                                <td>Dr. {{ $ticket->doctor->name }}</td>
-                                <td>
-                                    @if($ticket->is_priority)
-                                    <span class="badge bg-danger">Priority</span>
-                                    @else
-                                    <span class="badge bg-primary">Regular</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <a href="{{ route('admin.tickets.show-specific', $ticket->id) }}" class="btn btn-sm btn-outline-primary">
-                                        Show Again
-                                    </a>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0" id="completed-tickets-table">
+                            <thead>
+                                <tr>
+                                    <th>Ticket #</th>
+                                    <th>Department</th>
+                                    <th>Doctor</th>
+                                    <th>Type</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($completedTickets as $ticket)
+                                <tr data-department="{{ $ticket->department_id }}" 
+                                    data-doctor="{{ $ticket->doctor_id }}" 
+                                    data-ticket="{{ $ticket->ticket_number }}">
+                                    <td>{{ $ticket->ticket_number }}</td>
+                                    <td>{{ $ticket->department->name }}</td>
+                                    <td>Dr. {{ $ticket->doctor->name }}</td>
+                                    <td>
+                                        @if($ticket->is_priority)
+                                        <span class="badge bg-danger">Priority</span>
+                                        @else
+                                        <span class="badge bg-primary">Regular</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('admin.tickets.show-specific', $ticket->id) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye d-md-none"></i>
+                                            <span class="d-none d-md-inline">Show Again</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                     @else
                     <div class="p-4 text-center text-muted">
                         No processed tickets yet
@@ -401,6 +456,70 @@ $(document).ready(function() {
             }
         });
     });
+
+    // UPDATED: Filter functionality with apply button
+    $('#apply-filters-btn').click(function() {
+        applyFilters();
+    });
+
+    function applyFilters() {
+        const departmentId = $('#department-filter').val();
+        const doctorId = $('#doctor-filter').val();
+        
+        // Filter regular queue
+        $("#regular-queue-table tbody tr").each(function() {
+            const rowDeptId = $(this).data('department');
+            const rowDoctorId = $(this).data('doctor');
+            
+            let showRow = true;
+            
+            if (departmentId && rowDeptId != departmentId) {
+                showRow = false;
+            }
+            
+            if (doctorId && rowDoctorId != doctorId) {
+                showRow = false;
+            }
+            
+            $(this).toggle(showRow);
+        });
+        
+        // Filter priority queue
+        $("#priority-queue-table tbody tr").each(function() {
+            const rowDeptId = $(this).data('department');
+            const rowDoctorId = $(this).data('doctor');
+            
+            let showRow = true;
+            
+            if (departmentId && rowDeptId != departmentId) {
+                showRow = false;
+            }
+            
+            if (doctorId && rowDoctorId != doctorId) {
+                showRow = false;
+            }
+            
+            $(this).toggle(showRow);
+        });
+        
+        // Filter completed tickets
+        $("#completed-tickets-table tbody tr").each(function() {
+            const rowDeptId = $(this).data('department');
+            const rowDoctorId = $(this).data('doctor');
+            
+            let showRow = true;
+            
+            if (departmentId && rowDeptId != departmentId) {
+                showRow = false;
+            }
+            
+            if (doctorId && rowDoctorId != doctorId) {
+                showRow = false;
+            }
+            
+            $(this).toggle(showRow);
+        });
+    }
 });
 </script>
 @endsection

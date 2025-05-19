@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
+use App\Models\Department;
+use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -28,15 +30,21 @@ class TicketQueueController extends Controller
             ->first();
 
         $completedTickets = Ticket::where('status', 'completed')
-            ->orderBy('position', 'desc')
+            ->orderBy('updated_at', 'desc')
             ->get();
+            
+        // Get all departments and doctors for filters
+        $departments = Department::orderBy('name')->get();
+        $doctors = Doctor::orderBy('name')->get();
 
         return view('admin.tickets.index', [
             'regularTickets' => $regularTickets,
             'priorityTickets' => $priorityTickets,
             'regularCurrent' => $regularCurrent,
             'priorityCurrent' => $priorityCurrent,
-            'completedTickets' => $completedTickets
+            'completedTickets' => $completedTickets,
+            'departments' => $departments,
+            'doctors' => $doctors
         ]);
     }
 
@@ -110,7 +118,6 @@ class TicketQueueController extends Controller
         return response()->json(['message' => 'Priority removed']);
     }
 
-    // Renamed to match route names in web.php
     public function regularNext(Request $request)
     {
         return $this->handleNextQueue(false, $request->current_ticket_id);
@@ -258,6 +265,62 @@ class TicketQueueController extends Controller
         return response()->json([
             'success' => true,
             'ticket' => $ticket->fresh(['department', 'doctor'])
+        ]);
+    }
+    
+    // New methods for filtering
+    public function filterByDepartment(Request $request)
+    {
+        $departmentId = $request->department_id;
+        
+        $query = Ticket::query();
+        
+        if ($departmentId) {
+            $query->where('department_id', $departmentId);
+        }
+        
+        $tickets = $query->orderBy('is_priority', 'desc')
+                        ->orderBy('position')
+                        ->get();
+                        
+        return response()->json([
+            'success' => true,
+            'tickets' => $tickets->load(['department', 'doctor'])
+        ]);
+    }
+    
+    public function filterByDoctor(Request $request)
+    {
+        $doctorId = $request->doctor_id;
+        
+        $query = Ticket::query();
+        
+        if ($doctorId) {
+            $query->where('doctor_id', $doctorId);
+        }
+        
+        $tickets = $query->orderBy('is_priority', 'desc')
+                        ->orderBy('position')
+                        ->get();
+                        
+        return response()->json([
+            'success' => true,
+            'tickets' => $tickets->load(['department', 'doctor'])
+        ]);
+    }
+    
+    public function search(Request $request)
+    {
+        $searchTerm = $request->search;
+        
+        $tickets = Ticket::where('ticket_number', 'like', "%{$searchTerm}%")
+                        ->orderBy('is_priority', 'desc')
+                        ->orderBy('position')
+                        ->get();
+                        
+        return response()->json([
+            'success' => true,
+            'tickets' => $tickets->load(['department', 'doctor'])
         ]);
     }
 }
